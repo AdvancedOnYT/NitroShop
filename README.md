@@ -8,8 +8,8 @@ NitroShop is very much a **vibecoded** project. It was built through a lot of ex
 
 Community contributions are welcome. If you're interested in helping improve NitroShop, fixing bugs, adding features, or contributing to future updates, feel free to get involved.
 
-[2026-05-31_11-28-42.631_top.bmp](https://github.com/user-attachments/files/28439824/2026-05-31_11-28-42.631_top.bmp)
-[2026-05-31_11-38-26.880_top.bmp](https://github.com/user-attachments/files/28439826/2026-05-31_11-38-26.880_top.bmp)
+<img width="400" height="240" alt="2026-05-31_11-28-42 631_top" src="https://github.com/user-attachments/assets/4fc16e7b-6756-47b9-8b7a-259d257f48a8" />
+<img width="400" height="240" alt="2026-05-31_11-38-26 880_top" src="https://github.com/user-attachments/assets/24542845-665b-4409-855f-2445440074f6" />
 
 ## Features
 
