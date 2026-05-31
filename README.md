@@ -8,6 +8,9 @@ NitroShop is very much a **vibecoded** project. It was built through a lot of ex
 
 Community contributions are welcome. If you're interested in helping improve NitroShop, fixing bugs, adding features, or contributing to future updates, feel free to get involved.
 
+[2026-05-31_11-28-42.631_top.bmp](https://github.com/user-attachments/files/28439824/2026-05-31_11-28-42.631_top.bmp)
+[2026-05-31_11-38-26.880_top.bmp](https://github.com/user-attachments/files/28439826/2026-05-31_11-38-26.880_top.bmp)
+
 ## Features
 
 * **Direct Downloads**: Downloads NDS ROMs from online archives straight to your console's SD card.
@@ -61,3 +64,13 @@ Planned improvements and features:
 * ROM databases parsed from standard release archives.
 * **Antigravity/Codex**, because I barely know what I'm doing.
 * Thanks to everyone in the homebrew community who tests, reports issues, and contributes ideas.
+
+## Legal Disclaimer
+
+**NitroShop** is a client-side interface and tool designed solely to help users access publicly available online archives. 
+
+* **No ROM Hosting**: NitroShop does not host, store, mirror, or distribute any ROMs, game files, or copyrighted material on its own servers, repositories, or distribution channels.
+* **Third-Party Content**: All game listings, files, and catalog data streamed or downloaded through this application are hosted entirely on third-party servers (such as Archive.org) by independent external uploaders. 
+* **User Responsibility**: NitroShop has no control over, and assumes no responsibility for, the content, privacy policies, or legal status of any third-party websites or archives. Users are responsible for complying with their local copyright laws and regulations before retrieving files.
+
+
