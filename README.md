@@ -37,6 +37,18 @@ Open the devkitPro shell, navigate to this directory, and run:
 # Build .3dsx homebrew executable
 make
 ```
+## Known Issues
+
+The following issues are currently known and being worked on:
+
+* **Slow download speeds** compared to what some users may expect.
+* The **"Settings"** text on the **All Games** menu can partially cut off the edge of the screen.
+* Larger game downloads may occasionally fail with the error:
+
+  ```
+  Download failed: Timeout was reached
+  ```
+* Downloads interrupted by connection issues currently need to be restarted from the beginning.
 
 ## To-Do
 
