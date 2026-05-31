@@ -37,3 +37,4 @@ make
 - Built using the **devkitPro** ecosystem.
 - UI powered by **Citro2D** and **Citro3D**.
 - ROM databases parsed from standard release archives.
+- **Antigravity/Codex** cause I barely know what I'm doing!
