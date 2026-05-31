@@ -206,7 +206,7 @@ void UI::drawTopScreen(const Catalog& catalog, const FavoritesManager& favs, con
     if (state != UIState::FIRST_LAUNCH_SETUP && state != UIState::GAME_DETAILS && state != UIState::DOWNLOADING) {
         drawText("NitroShop", 10, 5, 0.6f, 0.6f, color_accent);
     }
-    drawText("v1.0.0", 350, 8, 0.45f, 0.45f, color_text_dim);
+    drawText("v1.0.1", 350, 8, 0.45f, 0.45f, color_text_dim);
     
     if (state == UIState::FIRST_LAUNCH_SETUP) {
         if (setup_step == 0) {
@@ -377,7 +377,7 @@ void UI::drawTopScreen(const Catalog& catalog, const FavoritesManager& favs, con
         ss << "Index: " << (filtered_indices.empty() ? 0 : selected_idx + 1) << " / " << filtered_indices.size();
         drawText(ss.str(), 10, 224, 0.42f, 0.42f, color_text_dim);
         
-        drawText("D-Pad/CP: Scroll | A: Info | Y: Search | B: Settings", 150, 224, 0.42f, 0.42f, color_text_dim);
+        drawText("D-Pad: Scroll | A: Info | Y: Search | B: Settings", 115, 224, 0.40f, 0.40f, color_text_dim);
         
     } else if (state == UIState::GAME_DETAILS) {
         drawTextCentered("Game Details", 5, 0.6f, 0.6f, color_text, 400.0f);
@@ -545,7 +545,7 @@ void UI::drawTopScreen(const Catalog& catalog, const FavoritesManager& favs, con
             {"Change Archive.org Cookies", "Configure your login session credentials"},
             {"Refresh Catalog Now", "Downloads and rebuilds local database"},
             {"Clear Cached Catalog", "Deletes catalog cache file on SD"},
-            {"App Info / Version", "NitroShop by Advanced / v1.0.0"},
+            {"App Info / Version", "NitroShop by Advanced / v1.0.1"},
             {"Exit NitroShop", "Return to Homebrew Launcher / Home Menu"}
         };
         

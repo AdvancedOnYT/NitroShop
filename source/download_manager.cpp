@@ -169,88 +169,119 @@ void DownloadManager::runDownload() {
     
     FileSystem::createDirectory(download_dir);
     
-    uint64_t localSize = 0;
-    FILE* file = fopen(finalPath.c_str(), "wb");
-    
-    if (!file) {
-        status = DownloadStatus::ERROR;
-        error_msg = "Failed to open target file for writing";
-        thread_running = false;
-        return;
-    }
-    
-    char* file_buffer = (char*)malloc(128 * 1024);
-    if (file_buffer) {
-        setvbuf(file, file_buffer, _IOFBF, 128 * 1024);
-    }
-    
     std::string dlUrl = current_entry.url;
     if (dlUrl.compare(0, 8, "https://") == 0) {
         dlUrl = "http://" + dlUrl.substr(8);
     }
     
-    CURL* curl = curl_easy_init();
-    if (!curl) {
+    char* file_buffer = (char*)malloc(128 * 1024);
+    
+    uint64_t localSize = 0;
+    int max_retries = 3;
+    int attempt = 0;
+    CURLcode res = CURLE_OK;
+    
+    while (attempt <= max_retries && !cancel_requested) {
+        FILE* file = nullptr;
+        if (attempt == 0) {
+            file = fopen(finalPath.c_str(), "wb");
+            localSize = 0;
+        } else {
+            // Sleep 2 seconds before retrying
+            svcSleepThread(2000000000ULL);
+            localSize = FileSystem::getFileSize(finalPath);
+            file = fopen(finalPath.c_str(), "ab");
+        }
+        
+        if (!file) {
+            status = DownloadStatus::ERROR;
+            error_msg = "Failed to open target file for writing";
+            if (file_buffer) free(file_buffer);
+            thread_running = false;
+            return;
+        }
+        
+        if (file_buffer) {
+            setvbuf(file, file_buffer, _IOFBF, 128 * 1024);
+        }
+        
+        CURL* curl = curl_easy_init();
+        if (!curl) {
+            fclose(file);
+            status = DownloadStatus::ERROR;
+            error_msg = "Failed to initialize libcurl";
+            if (file_buffer) free(file_buffer);
+            thread_running = false;
+            return;
+        }
+        
+        ProgressData progData;
+        progData.manager = this;
+        progData.local_file_size = localSize;
+        progData.header_content_length = 0;
+        progData.start_time = osGetTime();
+        progData.curl_handle = curl;
+        
+        curl_easy_setopt(curl, CURLOPT_URL, dlUrl.c_str());
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, file);
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, fwrite);
+        curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, headerCallback);
+        curl_easy_setopt(curl, CURLOPT_HEADERDATA, &progData);
+        
+        curl_easy_setopt(curl, CURLOPT_CAINFO, "romfs:/cacert.pem");
+        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 1L);
+        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 2L);
+        curl_easy_setopt(curl, CURLOPT_SSL_SESSIONID_CACHE, 1L);
+        curl_easy_setopt(curl, CURLOPT_SSL_ENABLE_ALPN, 0L);
+        
+        curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+        curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1L);
+        curl_easy_setopt(curl, CURLOPT_USERAGENT, "NitroShop/1.0 (Nintendo 3DS)");
+        
+        curl_easy_setopt(curl, CURLOPT_TCP_NODELAY, 1L);
+        curl_easy_setopt(curl, CURLOPT_BUFFERSIZE, 131072L);
+        curl_easy_setopt(curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+        curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 15L);
+        curl_easy_setopt(curl, CURLOPT_TIMEOUT, 0L); // Unlimited timeout to support slow large downloads
+        curl_easy_setopt(curl, CURLOPT_LOW_SPEED_LIMIT, 100L);
+        curl_easy_setopt(curl, CURLOPT_LOW_SPEED_TIME, 30L);
+        curl_easy_setopt(curl, CURLOPT_TCP_KEEPALIVE, 1L);
+        curl_easy_setopt(curl, CURLOPT_TCP_KEEPIDLE, 60L);
+        curl_easy_setopt(curl, CURLOPT_TCP_KEEPINTVL, 30L);
+        
+        if (localSize > 0) {
+            curl_easy_setopt(curl, CURLOPT_RESUME_FROM_LARGE, (curl_off_t)localSize);
+        }
+        
+        struct curl_slist* headers = nullptr;
+        headers = curl_slist_append(headers, "Accept-Encoding: identity");
+        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+        
+        if (!archive_cookie.empty()) {
+            curl_easy_setopt(curl, CURLOPT_COOKIE, archive_cookie.c_str());
+        }
+        
+        curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0L);
+        curl_easy_setopt(curl, CURLOPT_XFERINFOFUNCTION, progressCallback);
+        curl_easy_setopt(curl, CURLOPT_XFERINFODATA, &progData);
+        
+        res = curl_easy_perform(curl);
+        
+        fflush(file);
         fclose(file);
-        status = DownloadStatus::ERROR;
-        error_msg = "Failed to initialize libcurl";
-        thread_running = false;
-        return;
+        curl_slist_free_all(headers);
+        curl_easy_cleanup(curl);
+        
+        if (res == CURLE_OK || cancel_requested) {
+            break;
+        }
+        
+        attempt++;
     }
     
-    ProgressData progData;
-    progData.manager = this;
-    progData.local_file_size = localSize;
-    progData.header_content_length = 0;
-    progData.start_time = osGetTime();
-    progData.curl_handle = curl;
-    
-    curl_easy_setopt(curl, CURLOPT_URL, dlUrl.c_str());
-    curl_easy_setopt(curl, CURLOPT_WRITEDATA, file);
-    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, fwrite);
-    curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, headerCallback);
-    curl_easy_setopt(curl, CURLOPT_HEADERDATA, &progData);
-    
-    curl_easy_setopt(curl, CURLOPT_CAINFO, "romfs:/cacert.pem");
-    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 1L);
-    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 2L);
-    curl_easy_setopt(curl, CURLOPT_SSL_SESSIONID_CACHE, 1L);
-    curl_easy_setopt(curl, CURLOPT_SSL_ENABLE_ALPN, 0L);
-    
-    curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
-    curl_easy_setopt(curl, CURLOPT_FAILONERROR, 1L);
-    curl_easy_setopt(curl, CURLOPT_USERAGENT, "NitroShop/1.0 (Nintendo 3DS)");
-    
-    curl_easy_setopt(curl, CURLOPT_TCP_NODELAY, 1L);
-    curl_easy_setopt(curl, CURLOPT_BUFFERSIZE, 131072L);
-    curl_easy_setopt(curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
-    curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 15L);
-    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 600L);
-    curl_easy_setopt(curl, CURLOPT_LOW_SPEED_LIMIT, 100L);
-    curl_easy_setopt(curl, CURLOPT_LOW_SPEED_TIME, 30L);
-    curl_easy_setopt(curl, CURLOPT_TCP_KEEPALIVE, 1L);
-    curl_easy_setopt(curl, CURLOPT_TCP_KEEPIDLE, 60L);
-    curl_easy_setopt(curl, CURLOPT_TCP_KEEPINTVL, 30L);
-    
-    struct curl_slist* headers = nullptr;
-    headers = curl_slist_append(headers, "Accept-Encoding: identity");
-    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
-    
-    if (!archive_cookie.empty()) {
-        curl_easy_setopt(curl, CURLOPT_COOKIE, archive_cookie.c_str());
+    if (file_buffer) {
+        free(file_buffer);
     }
-    
-    curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0L);
-    curl_easy_setopt(curl, CURLOPT_XFERINFOFUNCTION, progressCallback);
-    curl_easy_setopt(curl, CURLOPT_XFERINFODATA, &progData);
-    
-    CURLcode res = curl_easy_perform(curl);
-    
-    fflush(file);
-    fclose(file);
-    free(file_buffer);
-    curl_slist_free_all(headers);
-    curl_easy_cleanup(curl);
     
     if (cancel_requested) {
         status = DownloadStatus::CANCELLED;
