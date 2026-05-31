@@ -1,6 +1,6 @@
 # NitroShop
 
-A lightweight, responsive C++ homebrew application for the Nintendo 3DS (Old 3DS & New 3DS) that allows users to browse, search, and download Nintendo DS ROMs directly to their SD card for use with TWiLight Menu++.
+A lightweight, responsive C++ directory explorer and downloader client for the Nintendo 3DS (Old 3DS & New 3DS) designed to browse, search, and retrieve files directly to your console's SD card from remote index listings.
 
 ## About This Project
 
@@ -8,15 +8,12 @@ NitroShop is very much a **vibecoded** project. It was built through a lot of ex
 
 Community contributions are welcome. If you're interested in helping improve NitroShop, fixing bugs, adding features, or contributing to future updates, feel free to get involved.
 
-<img width="400" height="240" alt="2026-05-31_11-28-42 631_top" src="https://github.com/user-attachments/assets/4fc16e7b-6756-47b9-8b7a-259d257f48a8" />
-<img width="400" height="240" alt="2026-05-31_11-38-26 880_top" src="https://github.com/user-attachments/assets/24542845-665b-4409-855f-2445440074f6" />
-
 ## Features
 
-* **Direct Downloads**: Downloads NDS ROMs from online archives straight to your console's SD card.
-* **Fast Search**: Trigger the 3DS system keyboard to filter the game catalog case-insensitively with partial title matches.
-* **Alphabetical Fast Navigation**: Press **L** to open an A-Z overlay and jump directly to any letter in the catalog.
-* **Favorites & Recents**: Keep track of your favorite games and review your recent download history.
+* **Direct Downloads**: Retrieves files from remote directories straight to your console's SD card.
+* **Fast Search**: Trigger the 3DS system keyboard to filter the index listing case-insensitively with partial name matches.
+* **Alphabetical Fast Navigation**: Press **L** to open an A-Z overlay and jump directly to files starting with any letter.
+* **Favorites & Recents**: Keep track of bookmarked files and review your recent download history.
 * **Interactive Setup Wizard**: Run a user-friendly wizard on first launch to configure your download folder and credentials.
 * **Local Web Configuration Portal**: Enter Archive.org credentials easily via a web page hosted temporarily by the 3DS on your local network.
 * **Secure HTTPS Connections**: Leverages standard SSL/TLS certification via a bundled `cacert.pem` root CA bundle.
@@ -51,10 +48,9 @@ The following issues are currently known and being worked on:
 
 Planned improvements and features:
 
-* Create an installable .cia file so user can access NitroShop from the Home Menu.
 * Improve download speeds.
-* Add a download queue for downloading multiple games.
-* Display game icons alongside each game entry.
+* Add a download queue for downloading multiple files.
+* Display preview icons alongside file entries.
 * Continue improving UI responsiveness and overall stability.
 
 ## Credits
@@ -64,13 +60,3 @@ Planned improvements and features:
 * ROM databases parsed from standard release archives.
 * **Antigravity/Codex**, because I barely know what I'm doing.
 * Thanks to everyone in the homebrew community who tests, reports issues, and contributes ideas.
-
-## Legal Disclaimer
-
-**NitroShop** is a client-side interface and tool designed solely to help users access publicly available online archives. 
-
-* **No ROM Hosting**: NitroShop does not host, store, mirror, or distribute any ROMs, game files, or copyrighted material on its own servers, repositories, or distribution channels.
-* **Third-Party Content**: All game listings, files, and catalog data streamed or downloaded through this application are hosted entirely on third-party servers (such as Archive.org) by independent external uploaders. 
-* **User Responsibility**: NitroShop has no control over, and assumes no responsibility for, the content, privacy policies, or legal status of any third-party websites or archives. Users are responsible for complying with their local copyright laws and regulations before retrieving files.
-
-

@@ -11,8 +11,8 @@ endif
 # Homebrew Menu attributes
 #---------------------------------------------------------------------------------
 APP_TITLE       :=  NitroShop
-APP_AUTHOR      :=  Advanced / v1.0.1
-APP_DESCRIPTION :=  A simple NDS rom downloader.
+APP_AUTHOR      :=  Senshin / v1.0.2
+APP_DESCRIPTION :=  A directory explorer for NDS archives.
 ifeq (build,$(notdir $(CURDIR)))
     APP_ICON    :=  $(CURDIR)/../ICON.png
 else

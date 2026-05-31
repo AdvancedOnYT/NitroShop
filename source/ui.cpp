@@ -206,7 +206,7 @@ void UI::drawTopScreen(const Catalog& catalog, const FavoritesManager& favs, con
     if (state != UIState::FIRST_LAUNCH_SETUP && state != UIState::GAME_DETAILS && state != UIState::DOWNLOADING) {
         drawText("NitroShop", 10, 5, 0.6f, 0.6f, color_accent);
     }
-    drawText("v1.0.1", 350, 8, 0.45f, 0.45f, color_text_dim);
+    drawText("v1.0.2", 350, 8, 0.45f, 0.45f, color_text_dim);
     
     if (state == UIState::FIRST_LAUNCH_SETUP) {
         if (setup_step == 0) {
@@ -221,7 +221,7 @@ void UI::drawTopScreen(const Catalog& catalog, const FavoritesManager& favs, con
             drawTextCentered("your Archive.org login session cookies.", 115, 0.44f, 0.44f, color_text_dim);
             
             drawTextCentered("This allows NitroShop to securely fetch the", 140, 0.44f, 0.44f, color_text_dim);
-            drawTextCentered("catalog and download games directly to your SD.", 155, 0.44f, 0.44f, color_text_dim);
+            drawTextCentered("index and download files directly to your SD.", 155, 0.44f, 0.44f, color_text_dim);
             
             drawTextCentered("Press A or tap Next Step to begin.", 185, 0.45f, 0.45f, color_green);
         } else if (setup_step == 1) {
@@ -322,7 +322,7 @@ void UI::drawTopScreen(const Catalog& catalog, const FavoritesManager& favs, con
         
     } else if (state == UIState::MAIN_STOREFRONT) {
         // Subheader showing filter type
-        std::string modeStr = "All Games";
+        std::string modeStr = "All Files";
         if (list_type == MainListType::FAVORITES) modeStr = "Favorites";
         else if (list_type == MainListType::RECENTS) modeStr = "Recents (Last 20)";
         
@@ -427,7 +427,7 @@ void UI::drawTopScreen(const Catalog& catalog, const FavoritesManager& favs, con
         }
         
     } else if (state == UIState::DOWNLOADING) {
-        drawTextCentered("Downloading Game", 5, 0.6f, 0.6f, color_text);
+        drawTextCentered("Downloading File", 5, 0.6f, 0.6f, color_text);
         
         CatalogEntry entry = downloader.getCurrentEntry();
         std::string rawTitle = entry.title;
@@ -545,7 +545,7 @@ void UI::drawTopScreen(const Catalog& catalog, const FavoritesManager& favs, con
             {"Change Archive.org Cookies", "Configure your login session credentials"},
             {"Refresh Catalog Now", "Downloads and rebuilds local database"},
             {"Clear Cached Catalog", "Deletes catalog cache file on SD"},
-            {"App Info / Version", "NitroShop by Advanced / v1.0.1"},
+            {"App Info / Version", "NitroShop by Senshin / v1.0.2"},
             {"Exit NitroShop", "Return to Homebrew Launcher / Home Menu"}
         };
         
@@ -649,7 +649,7 @@ void UI::drawBottomScreen(const Catalog& catalog, const FavoritesManager& favs, 
         u32 recBg = (list_type == MainListType::RECENTS) ? color_accent_dim : color_card;
         u32 recTx = (list_type == MainListType::RECENTS) ? color_accent : color_text;
         
-        drawButton(10, 168, 95, 34, "All Games", allBg, allTx);
+        drawButton(10, 168, 95, 34, "All Files", allBg, allTx);
         drawButton(112, 168, 95, 34, "Favorites", favBg, favTx);
         drawButton(215, 168, 95, 34, "Recents", recBg, recTx);
         
@@ -674,9 +674,9 @@ void UI::drawBottomScreen(const Catalog& catalog, const FavoritesManager& favs, 
         const auto& entry = catalog.getEntries()[catIdx];
         bool isFav = favs.isFavorite(entry.title);
         
-        drawButton(20, 40, 280, 36, "Download Game (A)", color_green, color_bg);
+        drawButton(20, 40, 280, 36, "Download File (A)", color_green, color_bg);
         drawButton(20, 86, 280, 36, isFav ? "Remove Favorite (X)" : "Add Favorite (X)", color_orange, color_bg);
-        drawButton(20, 132, 280, 36, "Return to Catalog (B)", color_accent_dim, color_accent);
+        drawButton(20, 132, 280, 36, "Return to Index (B)", color_accent_dim, color_accent);
         
         drawTextCentered("TWiLight Menu++ ROM folder compatible.", 188, 0.42f, 0.42f, color_text_dim, 320.0f);
         
