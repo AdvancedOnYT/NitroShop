@@ -8,6 +8,10 @@ NitroShop is very much a **vibecoded** project. It was built through a lot of ex
 
 Community contributions are welcome. If you're interested in helping improve NitroShop, fixing bugs, adding features, or contributing to future updates, feel free to get involved.
 
+<img width="400" height="240" alt="2026-05-31_11-38-26 880_top" src="https://github.com/user-attachments/assets/4cf19614-f47b-4a77-9fc0-447d099f1477" />
+<img width="400" height="240" alt="2026-05-31_11-28-42 631_top" src="https://github.com/user-attachments/assets/6d002173-f1ce-4489-ad9a-5d14f9b32d41" />
+
+
 ## Features
 
 * **Direct Downloads**: Retrieves files from remote directories straight to your console's SD card.
